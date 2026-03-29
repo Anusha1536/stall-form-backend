@@ -1,0 +1,26 @@
+// import dns from 'dns';
+
+// dns.setDefaultResultOrder('ipv4first');
+import cors from "cors";
+import dns from "node:dns/promises";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);  // Cloudflare + Google DNS
+import express from 'express';
+import stallRoutes from "./routes/stallRoutes.js";
+import dotenv from "dotenv";
+import { connectToDb } from './config/db.js';
+
+dotenv.config();
+
+const PORT = 5000;
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/stalls", stallRoutes);
+
+connectToDb(() => {
+    app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
+});
+});
