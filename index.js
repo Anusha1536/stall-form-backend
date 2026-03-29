@@ -14,17 +14,28 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(cors({
+
+const corsOptions = {
   origin: [
     "http://localhost:5173",
     "https://eventstall-portal.netlify.app"
   ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
-}));
-app.options("*", cors());
+};
+
+// ✅ MUST be before everything
+app.use(cors(corsOptions));
+
+// ✅ Explicitly handle preflight
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
 
 app.use("/stalls", stallRoutes);
 
