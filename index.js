@@ -39,8 +39,13 @@ app.get("/", (req, res) => {
 
 app.use("/stalls", stallRoutes);
 
-connectToDb(() => {
+connectToDb()
+  .then(() => {
     app.listen(PORT, () => {
-    console.log(`server is running on port ${PORT}`);
-});
-});
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("DB connection failed:", err);
+    process.exit(1); // stop app properly
+  });
