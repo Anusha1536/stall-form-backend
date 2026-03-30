@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const connectToDb = async (cb) => {
+export const connectToDb = async () => {
   try {
     // Log MongoDB connection string (for debugging only — remove in production)
     console.log("MongoDB URI:", process.env.MONGO_URI);
@@ -23,7 +23,7 @@ export const connectToDb = async (cb) => {
         app.listen(PORT)
       });
     */
-    cb();
+  
   } catch (error) {
     /*
       Error Handling:
@@ -32,5 +32,6 @@ export const connectToDb = async (cb) => {
       - Prevent server from starting
     */
     console.error("Error connecting to MongoDB:", error.message);
+    throw error;
   }
 };
